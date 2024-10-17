@@ -55,8 +55,7 @@ script = ExtResource("1_fhl06")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.75, 0.75)
 sprite_frames = SubResource("SpriteFrames_37aqc")
-animation = &"swim"
-frame_progress = 0.743433
+animation = &"walk"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
