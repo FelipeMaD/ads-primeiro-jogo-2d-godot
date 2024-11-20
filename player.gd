@@ -5,6 +5,7 @@ var screen_size
 
 signal hit
 signal power_up
+signal bomb
 
 
 # Called when the node enters the scene tree for the first time.
@@ -56,7 +57,16 @@ func _on_body_entered(body):
 		hit.emit()
 	if body.is_in_group("power_up"):
 		body.hide()
+		var collision_shape = body.get_node("CollisionShape2D")
+		if collision_shape:
+			collision_shape.set_deferred("disabled", true)
 		power_up.emit()
+	if body.is_in_group("bomb"):
+		body.hide()
+		var collision_shape = body.get_node("CollisionShape2D")
+		if collision_shape:
+			collision_shape.set_deferred("disabled", true)
+		bomb.emit()
 		
-		
+
 

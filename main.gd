@@ -3,12 +3,14 @@ extends Node
 # Variável que referencia a scene do Inimigo para instanciar várias cópias
 @export var enemy_scene: PackedScene
 @export var power_up_scene: PackedScene
+@export var bomb_scene: PackedScene
 
 var score
 	
 func new_game():
 	score = 0
 	get_tree().call_group("enemy", "queue_free")
+	get_tree().call_group("bomb", "queue_free")
 	get_tree().call_group("power_up", "queue_free")
 	$HUD.update_score(score)
 	$HUD.show_message("Get Ready!")
@@ -41,7 +43,10 @@ func _on_enemy_timer_timeout():
 	# Atribui rotação ao inimigo
 	enemy.rotation = direction
 	# Define velocidade de movimentação do inimigo
-	var velocity = Vector2(randf_range(100.0, 250.0), 0.0)
+	
+
+	
+	var velocity = Vector2(enemy.speed, 0.0)
 	enemy.linear_velocity = velocity.rotated(direction)
 	
 
@@ -51,10 +56,15 @@ func _on_score_timer_timeout():
 	
 	var screen_size = get_viewport().size
 	
-	if(score % 3 == 0):
+	if(score % 10 == 0):
 		var power_up = power_up_scene.instantiate()
 		add_child(power_up)
 		power_up.position = Vector2(randi() % screen_size.x, randi() % screen_size.y)
+		
+	if(score % 20 == 0):
+		var bomb = bomb_scene.instantiate()
+		add_child(bomb)
+		bomb.position = Vector2(randi() % screen_size.x, randi() % screen_size.y)
 
 func _on_start_timer_timeout():
 	$EnemyTimer.start()
@@ -66,3 +76,9 @@ func _on_hud_start_game():
 
 func _on_player_power_up():
 	$PowerUpAudio.play()
+
+
+func _on_player_bomb():
+	$BombAudio.play()
+	get_tree().call_group("enemy", "queue_free")
+	
